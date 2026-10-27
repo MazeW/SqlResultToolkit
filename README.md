@@ -195,7 +195,9 @@ Everything that crosses into SSMS is wrapped: failures go to the activity log
 
 Needs MSBuild (Visual Studio Build Tools is enough — **no** VS SDK workload) and an
 installed SSMS 22. `VSCT.exe`, `CreatePkgDef.exe` and the .NET Framework 4.7.2 reference
-assemblies are vendored under `tools\`, so the build is self-contained.
+assemblies are **not** committed — they are ~176 MB of third-party binaries.
+`toolsestore-tools.ps1` fetches them from nuget.org, and `build.ps1` calls it
+automatically when they are missing, so a fresh clone still builds in one command.
 
 ```powershell
 .\build.ps1
