@@ -379,3 +379,15 @@ test/
 tools/                          vendored VSCT, CreatePkgDef, net472 ref assemblies
 dist/SqlResultToolkit.vsix      the build output
 ```
+
+## Licence
+
+MIT, with the [Commons Clause](https://commonsclause.com/) condition on top: use it,
+change it and redistribute it freely, but you may not **sell** it — that includes charging
+for it, hosting it as a paid service, or folding it into a product whose value comes
+substantially from it. Using it at work, including at a company that makes money, is fine;
+selling it is not.
+
+Note that this is deliberately *not* an open-source licence by the OSI definition, so
+GitHub reports the licence as "Other" and the project would not qualify for programmes that
+require OSI-approved licences, such as SignPath Foundation's free code signing.
