@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C1B4E2A-55E1-4D21-9A42-8B7B8E6D1C44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SqlCellInspector</RootNamespace>
+    <AssemblyName>SqlCellInspector</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\obj\bin\</OutputPath>
+    <IntermediateOutputPath>..\obj\intermediate\</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;VSTHRD010</NoWarn>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <!-- All Visual Studio / SSMS references are resolved straight out of the installed
+       SSMS 22 directory. That guarantees we compile against exactly the assemblies
+       that will be loaded at run time, so there is no binding-redirect guesswork. -->
+  <PropertyGroup>
+    <SsmsIde Condition=" '$(SsmsIde)' == '' ">C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE</SsmsIde>
+
+    <!-- Build Tools ships no .NET Framework targeting pack, so point MSBuild at the
+         reference assemblies vendored under tools\refs (the
+         Microsoft.NETFramework.ReferenceAssemblies.net472 package). Override
+         TargetFrameworkRootPath on the command line to use an installed pack instead. -->
+    <TargetFrameworkRootPath Condition=" '$(TargetFrameworkRootPath)' == '' AND Exists('$(MSBuildThisFileDirectory)..\tools\refs\.NETFramework\v4.7.2\mscorlib.dll') ">$(MSBuildThisFileDirectory)..\tools\refs\</TargetFrameworkRootPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Design" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.Shell.15.0">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Shell.15.0.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- From the VS 17.x/18 shell on, the old per-version interop assemblies are just
+         type forwarders into Microsoft.VisualStudio.Interop. Reference that one and do
+         NOT embed interop types: the consolidated assembly is a normal managed assembly
+         with no ImportedFromTypeLib attribute, so embedding is rejected. -->
+    <Reference Include="Microsoft.VisualStudio.Interop">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Interop.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Shell.Immutable.14.0.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Imaging">
+      <HintPath>$(SsmsIde)\Microsoft.VisualStudio.Imaging.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Utilities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Threading">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Threading.17.x\Microsoft.VisualStudio.Threading.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Validation">
+      <HintPath>$(SsmsIde)\PublicAssemblies\Microsoft.VisualStudio.Validation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- The SSMS results grid itself. Public API only: GridControl.GridStorage,
+         GetCurrentCell, SelectionChanged, GetHeaderInfo. -->
+    <Reference Include="Microsoft.SqlServer.GridControl">
+      <HintPath>$(SsmsIde)\Microsoft.SqlServer.GridControl.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="SqlCellInspectorPackage.cs" />
+    <Compile Include="CellInspectorWindow.cs" />
+    <Compile Include="Grid\GridMonitor.cs" />
+    <Compile Include="Grid\CellSnapshot.cs" />
+    <Compile Include="Grid\ResultSetAccessor.cs" />
+    <Compile Include="Grid\SelectionReader.cs" />
+    <Compile Include="Grid\PendingEdits.cs" />
+    <Compile Include="Grid\CellHighlighter.cs" />
+    <Compile Include="Format\Token.cs" />
+    <Compile Include="Format\JsonPrettyPrinter.cs" />
+    <Compile Include="Format\XmlPrettyPrinter.cs" />
+    <Compile Include="Format\HexDump.cs" />
+    <Compile Include="Format\SqlTypeCatalog.cs" />
+    <Compile Include="Format\ValueDescriber.cs" />
+    <Compile Include="Format\CellRenderer.cs" />
+    <Compile Include="Format\SqlLiteral.cs" />
+    <Compile Include="Format\ScriptGenerator.cs" />
+    <Compile Include="Format\SqlTableFinder.cs" />
+    <Compile Include="Format\ValueListBuilder.cs" />
+    <Compile Include="UI\Theme.cs" />
+    <Compile Include="UI\EditorText.cs" />
+    <Compile Include="UI\CellInspectorControl.cs" />
+    <Compile Include="UI\RowView.cs" />
+    <Compile Include="UI\ScriptView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Holds the compiled command table (Menus.ctmenu). build.ps1 runs VSCT.exe
+         before MSBuild so the .cto referenced below exists. ManifestResourceName
+         pins the manifest name to "VSPackage.resources", which is where the shell
+         looks up a named (non-numeric) menu resource for a managed package. -->
+    <EmbeddedResource Include="VSPackage.resx">
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+      <LogicalName>VSPackage.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SqlCellInspector.vsct" />
+    <None Include="source.extension.vsixmanifest" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

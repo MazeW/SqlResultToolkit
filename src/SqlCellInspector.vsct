@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="guidSqlCellInspectorPackage">
+
+    <Groups>
+      <!-- A group's parent must be a MENU, never another group. Parenting this group to
+           IDG_VS_WNDO_OTRWNDWS1 (which is itself a group) silently dropped the placement:
+           VSCT accepted it and the command simply never appeared anywhere, even though it
+           was routable by its key binding. The View menu placement below always exists;
+           the Other Windows placement is added separately as a CommandPlacement. -->
+      <Group guid="guidSqlCellInspectorCmdSet" id="ViewMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW" />
+      </Group>
+
+      <!-- The Edit menu, which always exists. SSMS's query editor does NOT use
+           IDM_VS_CTXT_CODEWIN for its right-click menu (verified: the item never
+           appeared there), so that placement is only kept as a best-effort extra below. -->
+      <Group guid="guidSqlCellInspectorCmdSet" id="EditMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EDIT" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidSqlCellInspectorCmdSet" id="cmdidShowCellInspector" priority="0x0100" type="Button">
+        <Parent guid="guidSqlCellInspectorCmdSet" id="ViewMenuGroup" />
+        <Icon guid="guidImages" id="bmpInspector" />
+        <Strings>
+          <ButtonText>SQL Cell &amp;Inspector</ButtonText>
+          <CommandName>View.SqlCellInspector</CommandName>
+          <ToolTipText>Show the complete value of the selected result-grid cell</ToolTipText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSqlCellInspectorCmdSet" id="cmdidQuoteSelectionAsList" priority="0x0100" type="Button">
+        <Parent guid="guidSqlCellInspectorCmdSet" id="EditMenuGroup" />
+        <Strings>
+          <ButtonText>Quote Selection as SQL List</ButtonText>
+          <CommandName>Edit.QuoteSelectionAsSqlList</CommandName>
+          <ToolTipText>Turn the selected lines into ('a', 'b', 'c')</ToolTipText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\Inspector.png" usedList="bmpInspector" />
+    </Bitmaps>
+
+  </Commands>
+
+  <CommandPlacements>
+    <!-- Also list it under View > Other Windows, where tool windows are conventionally
+         found. This is the correct way to put a button into one of the shell's own
+         groups. If SSMS does not define this group the placement is ignored and the
+         View menu entry above still stands. -->
+    <CommandPlacement guid="guidSqlCellInspectorCmdSet" id="cmdidShowCellInspector" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+    </CommandPlacement>
+
+    <!-- Best effort: if a code window's standard context menu is ever in play, offer it
+         there too. SSMS's SQL editor uses its own menu, so this usually shows nothing. -->
+    <CommandPlacement guid="guidSqlCellInspectorCmdSet" id="cmdidQuoteSelectionAsList" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <KeyBindings>
+    <!-- Two-chord binding: Ctrl+Alt+Q then Ctrl+Alt+V.
+         Rebind under Tools > Options > Keyboard if it clashes. -->
+    <KeyBinding guid="guidSqlCellInspectorCmdSet" id="cmdidShowCellInspector"
+                editor="guidVSStd97"
+                key1="Q" mod1="Control Alt" key2="V" mod2="Control Alt" />
+
+    <!-- Ctrl+Alt+Q then Ctrl+Alt+L: quote the selected lines as a SQL list. -->
+    <KeyBinding guid="guidSqlCellInspectorCmdSet" id="cmdidQuoteSelectionAsList"
+                editor="guidVSStd97"
+                key1="Q" mod1="Control Alt" key2="L" mod2="Control Alt" />
+  </KeyBindings>
+
+  <Symbols>
+    <GuidSymbol name="guidSqlCellInspectorPackage" value="{79da0b49-76bd-41ff-91b6-97d0fea27706}" />
+
+    <GuidSymbol name="guidSqlCellInspectorCmdSet" value="{ca2d1c5c-c7f8-434d-9bab-ae97a8f0291a}">
+      <IDSymbol name="ViewMenuGroup" value="0x1020" />
+      <IDSymbol name="EditMenuGroup" value="0x1022" />
+      <IDSymbol name="cmdidShowCellInspector" value="0x0100" />
+      <IDSymbol name="cmdidQuoteSelectionAsList" value="0x0102" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{7e3a0ad1-1e4b-4a0f-9e84-2c1a1d7a6b55}">
+      <IDSymbol name="bmpInspector" value="1" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

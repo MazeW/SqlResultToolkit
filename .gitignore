@@ -1,0 +1,19 @@
+# Build output
+obj/
+dist/
+bin/
+
+# Vendored build tools: about 176 MB of binaries from nuget.org.
+# tools\restore-tools.ps1 fetches them, and build.ps1 calls it when they are missing.
+tools/*
+!tools/restore-tools.ps1
+
+# Visual Studio / editor cruft
+.vs/
+*.user
+*.suo
+*.userprefs
+*.pdb
+
+# Generated during an end-to-end run
+test/list-demo.sql

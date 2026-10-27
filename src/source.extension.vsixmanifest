@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="SqlCellInspector.79da0b49-76bd-41ff-91b6-97d0fea27706"
+              Version="1.5.1"
+              Language="en-US"
+              Publisher="Local build" />
+    <DisplayName>SQL Cell Inspector</DisplayName>
+    <Description xml:space="preserve">Adds a dockable side panel to SSMS that shows the complete value of the selected result-grid cell, formatted and syntax-coloured for its SQL Server type: JSON and XML are pretty-printed, binary gets a hex dump with an image preview, and dates, GUIDs, decimals, spatial and rowversion values get an exact-value breakdown.</Description>
+    <MoreInfo>https://localhost/sql-cell-inspector</MoreInfo>
+    <Tags>SSMS;SQL Server;results grid;JSON;XML;hex</Tags>
+  </Metadata>
+  <Installation>
+    <!-- Id and version range taken from the manifests SSMS 22 itself ships
+         (Extensions\Microsoft\SSMS.PresenterMode\extension.vsixmanifest). -->
+    <InstallationTarget Id="Microsoft.VisualStudio.Ssms" Version="[22.0,)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Ssms" Version="[22.0,)">
+      <ProductArchitecture>arm64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" Path="SqlCellInspector.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="SqlCellInspector.dll" AssemblyName="SqlCellInspector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </Assets>
+</PackageManifest>
