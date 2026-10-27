@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="SqlResultToolkit.79da0b49-76bd-41ff-91b6-97d0fea27706"
-              Version="1.7.0"
+              Version="1.7.1"
               Language="en-US"
               Publisher="Local build" />
     <DisplayName>SQL Result Toolkit</DisplayName>
