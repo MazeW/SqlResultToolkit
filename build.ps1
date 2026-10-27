@@ -13,7 +13,10 @@
 param(
     [string]$Configuration = 'Release',
     [string]$SsmsIde = 'C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE',
-    [switch]$Install
+    [switch]$Install,
+    # The .pdb embeds the absolute source paths it was built from, so it stays out of
+    # the shipped package. Pass this when you want symbols in a local build to debug with.
+    [switch]$IncludeSymbols
 )
 
 $ErrorActionPreference = 'Stop'
@@ -72,10 +75,17 @@ Write-Host "`n[1/4] Compiling command table"
 if ($LASTEXITCODE -ne 0) { throw "VSCT failed with exit code $LASTEXITCODE" }
 
 # 2. Assembly
-Write-Host "`n[2/4] Building assembly"
+#    Without symbols the assembly is built with DebugType=none. Dropping the .pdb from
+#    the package is not enough on its own: the PE debug directory records the absolute
+#    path the .pdb was written to, so a shipped build would still carry the build
+#    machine's directory layout. The cost is no line numbers in stack traces from a
+#    released build; rebuild with -IncludeSymbols when you need them.
+$debugType = if ($IncludeSymbols) { 'portable' } else { 'none' }
+Write-Host "`n[2/4] Building assembly (DebugType=$debugType)"
 & $msbuild (Join-Path $src 'SqlResultToolkit.csproj') `
     "/p:Configuration=$Configuration" `
     "/p:SsmsIde=$SsmsIde" `
+    "/p:DebugType=$debugType" `
     /v:minimal /nologo
 if ($LASTEXITCODE -ne 0) { throw "MSBuild failed with exit code $LASTEXITCODE" }
 
@@ -108,7 +118,12 @@ Copy-Item $pkgdef $layout
 Copy-Item (Join-Path $src 'source.extension.vsixmanifest') (Join-Path $layout 'extension.vsixmanifest')
 
 $pdb = [IO.Path]::ChangeExtension($assembly, '.pdb')
-if (Test-Path $pdb) { Copy-Item $pdb $layout }
+if ($IncludeSymbols -and (Test-Path $pdb)) {
+    Copy-Item $pdb $layout
+} elseif (Test-Path (Join-Path $layout (Split-Path $pdb -Leaf))) {
+    # A previous -IncludeSymbols build may have left one behind in the layout.
+    Remove-Item -Force (Join-Path $layout (Split-Path $pdb -Leaf))
+}
 
 $contentTypes = @'
 <?xml version="1.0" encoding="utf-8"?>
