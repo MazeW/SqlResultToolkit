@@ -11,10 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
-using SqlCellInspector.Format;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Format;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.UI
+namespace SqlResultToolkit.UI
 {
     /// <summary>
     /// The panel. Built in code rather than XAML so the assembly needs no markup compiler
@@ -22,7 +22,7 @@ namespace SqlCellInspector.UI
     ///
     /// Three tabs: the cell's value, the whole row, and generated T-SQL.
     /// </summary>
-    internal sealed class CellInspectorControl : UserControl
+    internal sealed class ResultToolkitControl : UserControl
     {
         private const int MaxColourizedTokens = 60000;
 
@@ -93,7 +93,7 @@ namespace SqlCellInspector.UI
         private bool _suppressModeEvent;
         private TextBox _editBox;
 
-        public CellInspectorControl()
+        public ResultToolkitControl()
         {
             _theme = Theme.Current();
             CellHighlighter.SetDark(_theme.IsDark);
@@ -347,7 +347,7 @@ namespace SqlCellInspector.UI
 
         private void ShowMessage(string message, string detail)
         {
-            _columnText.Text = "SQL Cell Inspector";
+            _columnText.Text = "SQL Result Toolkit";
             _typeText.Text = string.Empty;
             _badges.Children.Clear();
             _factsPanel.Children.Clear();
@@ -934,7 +934,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Staging the edited value failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Staging the edited value failed.", ex);
                 _statusText.Text = "Could not stage that value: " + ex.Message;
             }
         }
@@ -954,7 +954,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Unstaging failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Unstaging failed.", ex);
             }
         }
 
@@ -976,7 +976,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Copy failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Copy failed.", ex);
                 _statusText.Text = "Could not copy: " + ex.Message;
             }
         }
@@ -1027,7 +1027,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Save failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Save failed.", ex);
                 _statusText.Text = "Could not save: " + ex.Message;
             }
         }

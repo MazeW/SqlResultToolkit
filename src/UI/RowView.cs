@@ -5,10 +5,10 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using SqlCellInspector.Format;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Format;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.UI
+namespace SqlResultToolkit.UI
 {
     /// <summary>
     /// The whole current row, one column per line.
@@ -54,7 +54,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Reading the row failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Reading the row failed.", ex);
                 _fields = new List<RowField>();
             }
 
@@ -224,7 +224,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Copying the row failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Copying the row failed.", ex);
                 _status.Text = "Could not copy: " + ex.Message;
             }
         }

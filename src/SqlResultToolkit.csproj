@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9C1B4E2A-55E1-4D21-9A42-8B7B8E6D1C44}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SqlCellInspector</RootNamespace>
-    <AssemblyName>SqlCellInspector</AssemblyName>
+    <RootNamespace>SqlResultToolkit</RootNamespace>
+    <AssemblyName>SqlResultToolkit</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -113,9 +113,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="SqlCellInspectorPackage.cs" />
+    <Compile Include="SqlResultToolkitPackage.cs" />
     <Compile Include="Diagnostics.cs" />
-    <Compile Include="CellInspectorWindow.cs" />
+    <Compile Include="ResultToolkitWindow.cs" />
     <Compile Include="Grid\GridMonitor.cs" />
     <Compile Include="Grid\CellSnapshot.cs" />
     <Compile Include="Grid\ResultSetAccessor.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="Format\ValueListBuilder.cs" />
     <Compile Include="UI\Theme.cs" />
     <Compile Include="UI\EditorText.cs" />
-    <Compile Include="UI\CellInspectorControl.cs" />
+    <Compile Include="UI\ResultToolkitControl.cs" />
     <Compile Include="UI\RowView.cs" />
     <Compile Include="UI\ScriptView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -153,7 +153,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="SqlCellInspector.vsct" />
+    <None Include="SqlResultToolkit.vsct" />
     <None Include="source.extension.vsixmanifest" />
   </ItemGroup>
 

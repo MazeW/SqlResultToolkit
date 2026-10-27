@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using SqlCellInspector.Format;
+using SqlResultToolkit.Format;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// The table-name guesser. This one reads text the user wrote, so the cases that

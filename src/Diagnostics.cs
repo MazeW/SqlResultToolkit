@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SqlCellInspector
+namespace SqlResultToolkit
 {
     /// <summary>
     /// Keeps the problems this extension has hit, so they can be shown in the panel.
@@ -99,7 +99,7 @@ namespace SqlCellInspector
         public static string ToText()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("SQL Cell Inspector — recorded problems");
+            sb.AppendLine("SQL Result Toolkit — recorded problems");
             sb.AppendLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             sb.AppendLine();
 

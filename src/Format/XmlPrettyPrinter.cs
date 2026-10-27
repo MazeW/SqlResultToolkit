@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     /// <summary>
     /// Re-indents XML and emits colour tokens. Uses <see cref="XmlReader"/> for parsing so

@@ -1,25 +1,25 @@
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using SqlCellInspector.Grid;
-using SqlCellInspector.UI;
+using SqlResultToolkit.Grid;
+using SqlResultToolkit.UI;
 
-namespace SqlCellInspector
+namespace SqlResultToolkit
 {
     /// <summary>
     /// The dockable side panel. Owns the grid monitor for as long as it is alive, so
     /// nothing is hooked into SSMS while the window is closed.
     /// </summary>
     [Guid("caf2bb24-4d70-4e3a-bbe0-6579139c009d")]
-    public sealed class CellInspectorWindow : ToolWindowPane
+    public sealed class ResultToolkitWindow : ToolWindowPane
     {
         private GridMonitor _monitor;
-        private CellInspectorControl _view;
+        private ResultToolkitControl _view;
 
-        public CellInspectorWindow()
+        public ResultToolkitWindow()
         {
-            Caption = "SQL Cell Inspector";
-            _view = new CellInspectorControl();
+            Caption = "SQL Result Toolkit";
+            _view = new ResultToolkitControl();
             Content = _view;
         }
 
@@ -37,7 +37,7 @@ namespace SqlCellInspector
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Grid monitor failed to start.", ex);
+                SqlResultToolkitPackage.Log.Error("Grid monitor failed to start.", ex);
                 _view.ShowError("Could not attach to the results grid.", ex);
             }
         }
@@ -50,7 +50,7 @@ namespace SqlCellInspector
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Rendering the cell failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Rendering the cell failed.", ex);
                 _view.ShowError("Could not render this cell.", ex);
             }
         }

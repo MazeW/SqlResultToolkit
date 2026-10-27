@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SqlCellInspector.Format;
+using SqlResultToolkit.Format;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// Covers the two pure modules behind the script features: turning a value into a

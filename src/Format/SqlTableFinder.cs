@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     /// <summary>
     /// Guesses which table a result set came from by reading the query text.

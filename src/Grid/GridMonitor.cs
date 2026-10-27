@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using Microsoft.SqlServer.Management.UI.Grid;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     internal sealed class CellChangedEventArgs : EventArgs
     {
@@ -105,7 +105,7 @@ namespace SqlCellInspector.Grid
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Grid monitor tick failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Grid monitor tick failed.", ex);
             }
         }
 
@@ -320,7 +320,7 @@ namespace SqlCellInspector.Grid
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Could not hook a results grid.", ex);
+                SqlResultToolkitPackage.Log.Error("Could not hook a results grid.", ex);
                 _grids.Remove(grid);
             }
         }

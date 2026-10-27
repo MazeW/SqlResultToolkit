@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal sealed class Fact
     {

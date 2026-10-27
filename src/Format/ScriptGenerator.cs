@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal enum ScriptKind
     {

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SqlCellInspector.79da0b49-76bd-41ff-91b6-97d0fea27706"
-              Version="1.6.0"
+    <Identity Id="SqlResultToolkit.79da0b49-76bd-41ff-91b6-97d0fea27706"
+              Version="1.7.0"
               Language="en-US"
               Publisher="Local build" />
-    <DisplayName>SQL Cell Inspector</DisplayName>
-    <Description xml:space="preserve">Adds a dockable side panel to SSMS that shows the complete value of the selected result-grid cell, formatted and syntax-coloured for its SQL Server type: JSON and XML are pretty-printed, binary gets a hex dump with an image preview, and dates, GUIDs, decimals, spatial and rowversion values get an exact-value breakdown.</Description>
-    <MoreInfo>https://localhost/sql-cell-inspector</MoreInfo>
-    <Tags>SSMS;SQL Server;results grid;JSON;XML;hex</Tags>
+    <DisplayName>SQL Result Toolkit</DisplayName>
+    <Description xml:space="preserve">Adds a dockable side panel to SSMS for working with query results. Shows the complete value of the selected cell, formatted and syntax-coloured for its SQL Server type: JSON and XML are pretty-printed, binary gets a hex dump with an image preview, and dates, GUIDs, decimals, spatial and rowversion values get an exact-value breakdown. Generates INSERT, UPDATE, DELETE, SELECT and IN-list scripts from the selected rows, stages edits across many cells into one UPDATE, and converts a selection in the query editor into a quoted SQL list.</Description>
+    <MoreInfo>https://localhost/sql-result-toolkit</MoreInfo>
+    <Tags>SSMS;SQL Server;results grid;scripting;INSERT;UPDATE;JSON;XML;hex</Tags>
   </Metadata>
   <Installation>
     <!-- Id and version range taken from the manifests SSMS 22 itself ships
@@ -21,7 +21,7 @@
     </InstallationTarget>
   </Installation>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" Path="SqlCellInspector.pkgdef" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="SqlCellInspector.dll" AssemblyName="SqlCellInspector, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" Path="SqlResultToolkit.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" Path="SqlResultToolkit.dll" AssemblyName="SqlResultToolkit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </Assets>
 </PackageManifest>

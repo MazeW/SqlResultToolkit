@@ -7,25 +7,25 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
-namespace SqlCellInspector
+namespace SqlResultToolkit
 {
     /// <summary>
-    /// Package for the SQL Cell Inspector tool window.
+    /// Package for the SQL Result Toolkit tool window.
     /// </summary>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(CellInspectorWindow),
+    [ProvideToolWindow(typeof(ResultToolkitWindow),
         Style = VsDockStyle.Linked,
         Orientation = ToolWindowOrientation.Right,
         MultiInstances = false,
         Transient = false)]
     [Guid(PackageGuidString)]
-    public sealed class SqlCellInspectorPackage : AsyncPackage
+    public sealed class SqlResultToolkitPackage : AsyncPackage
     {
         public const string PackageGuidString = "79da0b49-76bd-41ff-91b6-97d0fea27706";
         public static readonly Guid CommandSet = new Guid("ca2d1c5c-c7f8-434d-9bab-ae97a8f0291a");
-        public const int CmdIdShowCellInspector = 0x0100;
+        public const int CmdIdShowResultToolkit = 0x0100;
         public const int CmdIdQuoteSelectionAsList = 0x0102;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -37,7 +37,7 @@ namespace SqlCellInspector
             {
                 commands.AddCommand(new MenuCommand(
                     (s, e) => ShowWindow(),
-                    new CommandID(CommandSet, CmdIdShowCellInspector)));
+                    new CommandID(CommandSet, CmdIdShowResultToolkit)));
 
                 var quote = new OleMenuCommand(
                     (s, e) => QuoteSelectionAsList(),
@@ -104,7 +104,7 @@ namespace SqlCellInspector
             ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
-                var pane = FindToolWindow(typeof(CellInspectorWindow), 0, create: true) as ToolWindowPane;
+                var pane = FindToolWindow(typeof(ResultToolkitWindow), 0, create: true) as ToolWindowPane;
                 if (pane?.Frame is IVsWindowFrame frame)
                 {
                     ErrorHandler.ThrowOnFailure(frame.Show());
@@ -112,7 +112,7 @@ namespace SqlCellInspector
             }
             catch (Exception ex)
             {
-                Log.Error("Could not show the Cell Inspector window.", ex);
+                Log.Error("Could not show the Result Toolkit window.", ex);
             }
         }
 
@@ -123,7 +123,7 @@ namespace SqlCellInspector
         /// </summary>
         internal static class Log
         {
-            private const string Source = "SqlCellInspector";
+            private const string Source = "SqlResultToolkit";
 
             public static void Error(string message, Exception ex = null)
             {

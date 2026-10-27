@@ -3,7 +3,7 @@
 
     These sources deliberately depend on nothing from Visual Studio, so they can be tested
     without SSMS in the loop. The grid plumbing (GridMonitor, ResultSetAccessor,
-    CellInspectorControl) can only be exercised inside a running SSMS.
+    ResultToolkitControl) can only be exercised inside a running SSMS.
 #>
 [CmdletBinding()]
 param()

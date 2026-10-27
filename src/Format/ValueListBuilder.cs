@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     /// <summary>
     /// Turns a block of text the user selected in the query editor into a SQL list:

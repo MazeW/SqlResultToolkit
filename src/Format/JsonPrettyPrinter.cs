@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     /// <summary>
     /// Re-indents JSON and emits colour tokens in one pass.

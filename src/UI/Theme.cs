@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
-using SqlCellInspector.Format;
+using SqlResultToolkit.Format;
 using DrawingColor = System.Drawing.Color;
 
-namespace SqlCellInspector.UI
+namespace SqlResultToolkit.UI
 {
     /// <summary>
     /// Colours for the panel, taken from the live VS/SSMS theme.

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal static class HexDump
     {

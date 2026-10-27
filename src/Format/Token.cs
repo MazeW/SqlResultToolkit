@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal enum TokenKind
     {

@@ -2,9 +2,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Management.UI.Grid;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// Proves the cell tinting works by driving the REAL SSMS GridControl, painting it to
@@ -189,13 +189,13 @@ namespace SqlCellInspector.Tests
     }
 }
 
-namespace SqlCellInspector
+namespace SqlResultToolkit
 {
     /// <summary>
     /// Stands in for the package's activity-log wrapper, which the harness cannot pull in
     /// because it would drag the whole Visual Studio shell with it.
     /// </summary>
-    internal static class SqlCellInspectorPackage
+    internal static class SqlResultToolkitPackage
     {
         internal static class Log
         {

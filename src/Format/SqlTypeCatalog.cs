@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal enum SqlTypeCategory
     {

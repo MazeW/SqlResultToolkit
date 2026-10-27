@@ -1,5 +1,5 @@
 <#
-    Creates dbo.CellInspectorDemo in the LocalDB "test" database: one row per interesting
+    Creates dbo.ResultToolkitDemo in the LocalDB "test" database: one row per interesting
     SQL Server type, so the panel can be exercised end to end.
 
     Drop it again with:  .\setup-demo-db.ps1 -Drop
@@ -26,8 +26,8 @@ function Invoke-Sql([string]$sql) {
 }
 
 if ($Drop) {
-    Invoke-Sql 'IF OBJECT_ID(''dbo.CellInspectorDemo'') IS NOT NULL DROP TABLE dbo.CellInspectorDemo;'
-    Write-Host 'Dropped dbo.CellInspectorDemo.'
+    Invoke-Sql 'IF OBJECT_ID(''dbo.ResultToolkitDemo'') IS NOT NULL DROP TABLE dbo.ResultToolkitDemo;'
+    Write-Host 'Dropped dbo.ResultToolkitDemo.'
     return
 }
 
@@ -36,11 +36,11 @@ $png = '0x89504E470D0A1A0A0000000D4948445200000001000000010806000000' +
        '1F15C4890000000D4944415478DA63F8CF0000030101002EA3B9EC0000000049454E44AE426082'
 
 Invoke-Sql @"
-IF OBJECT_ID('dbo.CellInspectorDemo') IS NOT NULL DROP TABLE dbo.CellInspectorDemo;
+IF OBJECT_ID('dbo.ResultToolkitDemo') IS NOT NULL DROP TABLE dbo.ResultToolkitDemo;
 
-CREATE TABLE dbo.CellInspectorDemo
+CREATE TABLE dbo.ResultToolkitDemo
 (
-    Id            int IDENTITY(1,1) NOT NULL CONSTRAINT PK_CellInspectorDemo PRIMARY KEY,
+    Id            int IDENTITY(1,1) NOT NULL CONSTRAINT PK_ResultToolkitDemo PRIMARY KEY,
     Name          nvarchar(100)   NULL,
     Payload       nvarchar(max)   NULL,
     Doc           xml             NULL,
@@ -57,7 +57,7 @@ CREATE TABLE dbo.CellInspectorDemo
     Ver           rowversion      NOT NULL
 );
 
-INSERT INTO dbo.CellInspectorDemo
+INSERT INTO dbo.ResultToolkitDemo
     (Name, Payload, Doc, Blob, Amount, Ratio, Flag, CreatedAt, CreatedOffset, OnlyDate, OnlyTime, Ref, Notes)
 VALUES
     (N'Ada Lovelace',
@@ -83,4 +83,4 @@ VALUES
     (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 "@
 
-Write-Host 'Created dbo.CellInspectorDemo with 3 rows.'
+Write-Host 'Created dbo.ResultToolkitDemo with 3 rows.'

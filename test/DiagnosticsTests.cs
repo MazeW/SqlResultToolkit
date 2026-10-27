@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// The problem recorder behind the panel's problems bar.
@@ -40,7 +40,7 @@ namespace SqlCellInspector.Tests
             Equal("recent returns everything", Diagnostics.Recent().Count, 3);
 
             string text = Diagnostics.ToText();
-            Check("copy text names the extension", text.Contains("SQL Cell Inspector"));
+            Check("copy text names the extension", text.Contains("SQL Result Toolkit"));
             Check("copy text includes every entry",
                 text.Contains("first thing broke") && text.Contains("second thing broke") && text.Contains("reflected call failed"));
 

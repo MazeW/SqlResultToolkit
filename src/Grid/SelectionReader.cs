@@ -4,9 +4,9 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using Microsoft.SqlServer.Management.UI.Grid;
-using SqlCellInspector.Format;
+using SqlResultToolkit.Format;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     /// <summary>
     /// Translates between the grid's column indices (row-number gutter at 0, what

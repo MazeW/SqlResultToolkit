@@ -9,12 +9,12 @@
 
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 
-if (-not ('SqlCellInspector.Native' -as [type])) {
+if (-not ('SqlResultToolkit.Native' -as [type])) {
     Add-Type @'
 using System;
 using System.Runtime.InteropServices;
 
-namespace SqlCellInspector
+namespace SqlResultToolkit
 {
     public struct RECT { public int Left, Top, Right, Bottom; }
 
@@ -62,16 +62,16 @@ function Wait-Ssms {
 
 function Focus-Ssms {
     $p = Wait-Ssms
-    [void][SqlCellInspector.Native]::ShowWindow($p.MainWindowHandle, 3)   # SW_MAXIMIZE
-    [void][SqlCellInspector.Native]::SetForegroundWindow($p.MainWindowHandle)
+    [void][SqlResultToolkit.Native]::ShowWindow($p.MainWindowHandle, 3)   # SW_MAXIMIZE
+    [void][SqlResultToolkit.Native]::SetForegroundWindow($p.MainWindowHandle)
     Start-Sleep -Milliseconds 400
     return $p
 }
 
 function Get-SsmsRect {
     $p = Wait-Ssms
-    $r = New-Object SqlCellInspector.RECT
-    [void][SqlCellInspector.Native]::GetWindowRect($p.MainWindowHandle, [ref]$r)
+    $r = New-Object SqlResultToolkit.RECT
+    [void][SqlResultToolkit.Native]::GetWindowRect($p.MainWindowHandle, [ref]$r)
     [PSCustomObject]@{ Left=$r.Left; Top=$r.Top; Right=$r.Right; Bottom=$r.Bottom; Width=$r.Right-$r.Left; Height=$r.Bottom-$r.Top }
 }
 
@@ -85,7 +85,7 @@ function Send-Keys {
 function Click-Screen {
     param([Parameter(Mandatory)][int]$X, [Parameter(Mandatory)][int]$Y, [int]$SettleMs = 500)
     [void](Focus-Ssms)
-    [SqlCellInspector.Native]::Click($X, $Y)
+    [SqlResultToolkit.Native]::Click($X, $Y)
     Start-Sleep -Milliseconds $SettleMs
 }
 

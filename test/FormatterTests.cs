@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using SqlCellInspector.Format;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Format;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// Exercises the formatting and description code outside SSMS. These are the parts with

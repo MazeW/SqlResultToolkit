@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Microsoft.SqlServer.Management.UI.Grid;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     /// <summary>
     /// Tints cells that have a pending change, in the real SSMS results grid.
@@ -75,7 +75,7 @@ namespace SqlCellInspector.Grid
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Could not hook cell painting.", ex);
+                SqlResultToolkitPackage.Log.Error("Could not hook cell painting.", ex);
                 Grids.Remove(grid);
                 return;
             }

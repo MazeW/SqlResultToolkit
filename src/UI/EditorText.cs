@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace SqlCellInspector.UI
+namespace SqlResultToolkit.UI
 {
     /// <summary>
     /// Reads the text of the query window the user is looking at.
@@ -33,7 +33,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Could not read the editor selection.", ex);
+                SqlResultToolkitPackage.Log.Error("Could not read the editor selection.", ex);
                 return null;
             }
         }
@@ -95,7 +95,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Could not replace the editor selection.", ex);
+                SqlResultToolkitPackage.Log.Error("Could not replace the editor selection.", ex);
                 return false;
             }
         }
@@ -142,7 +142,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Could not read the active document's text.", ex);
+                SqlResultToolkitPackage.Log.Error("Could not read the active document's text.", ex);
                 return null;
             }
         }

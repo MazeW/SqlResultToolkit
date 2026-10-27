@@ -1,5 +1,5 @@
 <#
-    Builds SqlCellInspector.vsix.
+    Builds SqlResultToolkit.vsix.
 
     Needs only:
       - MSBuild (Visual Studio Build Tools; no VS SDK workload required)
@@ -21,7 +21,7 @@ $root = $PSScriptRoot
 $src = Join-Path $root 'src'
 $obj = Join-Path $root 'obj'
 $dist = Join-Path $root 'dist'
-$layout = Join-Path $dist 'SqlCellInspector'
+$layout = Join-Path $dist 'SqlResultToolkit'
 
 function Find-MSBuild {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
@@ -63,29 +63,29 @@ New-Item -ItemType Directory -Force -Path $layout | Out-Null
 
 # 1. Command table -> .cto (embedded by VSPackage.resx as Menus.ctmenu)
 $vsct = Join-Path $root 'tools\vssdk\bin\VSCT.exe'
-$ctoPath = Join-Path $obj 'SqlCellInspector.cto'
+$ctoPath = Join-Path $obj 'SqlResultToolkit.cto'
 $vsctInc = Join-Path $root 'tools\VSSDK\inc'
 Write-Host "`n[1/4] Compiling command table"
 # VSCT wants the include path attached to the switch: "-I<path>", not "-I <path>"
 # and not "-I:<path>" (which it mis-splits on the drive-letter colon).
-& $vsct (Join-Path $src 'SqlCellInspector.vsct') $ctoPath "-I$vsctInc" "-I$(Join-Path $src 'Resources')" -nologo
+& $vsct (Join-Path $src 'SqlResultToolkit.vsct') $ctoPath "-I$vsctInc" "-I$(Join-Path $src 'Resources')" -nologo
 if ($LASTEXITCODE -ne 0) { throw "VSCT failed with exit code $LASTEXITCODE" }
 
 # 2. Assembly
 Write-Host "`n[2/4] Building assembly"
-& $msbuild (Join-Path $src 'SqlCellInspector.csproj') `
+& $msbuild (Join-Path $src 'SqlResultToolkit.csproj') `
     "/p:Configuration=$Configuration" `
     "/p:SsmsIde=$SsmsIde" `
     /v:minimal /nologo
 if ($LASTEXITCODE -ne 0) { throw "MSBuild failed with exit code $LASTEXITCODE" }
 
-$assembly = Join-Path $obj 'bin\SqlCellInspector.dll'
+$assembly = Join-Path $obj 'bin\SqlResultToolkit.dll'
 if (-not (Test-Path $assembly)) { throw "Build produced no assembly at $assembly" }
 
 # 3. pkgdef, generated from the package's registration attributes
 Write-Host "`n[3/4] Generating pkgdef"
 $createPkgDef = Join-Path $root 'tools\vssdk\bin\CreatePkgDef.exe'
-$pkgdef = Join-Path $obj 'SqlCellInspector.pkgdef'
+$pkgdef = Join-Path $obj 'SqlResultToolkit.pkgdef'
 if (Test-Path $pkgdef) { Remove-Item -Force $pkgdef }
 
 # /i is required: CreatePkgDef loads the assembly to read its registration attributes and
@@ -129,7 +129,7 @@ $contentTypes = @'
     $contentTypes,
     (New-Object Text.UTF8Encoding $false))
 
-$vsixPath = Join-Path $dist 'SqlCellInspector.vsix'
+$vsixPath = Join-Path $dist 'SqlResultToolkit.vsix'
 if (Test-Path $vsixPath) { Remove-Item -Force $vsixPath }
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [IO.Compression.ZipFile]::CreateFromDirectory($layout, $vsixPath)

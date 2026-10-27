@@ -7,10 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Shell;
-using SqlCellInspector.Format;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Format;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.UI
+namespace SqlResultToolkit.UI
 {
     /// <summary>
     /// Builds INSERT / UPDATE / DELETE / SELECT / IN-list statements from whatever is
@@ -392,7 +392,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Script generation failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Script generation failed.", ex);
                 SetOutput("-- Could not build the script: " + ex.Message);
                 _summary.Text = string.Empty;
             }
@@ -624,7 +624,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Copying the script failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Copying the script failed.", ex);
                 _summary.Text = "Could not copy: " + ex.Message;
             }
         }
@@ -645,7 +645,7 @@ namespace SqlCellInspector.UI
                     return;
                 }
 
-                string directory = Path.Combine(Path.GetTempPath(), "SqlCellInspector");
+                string directory = Path.Combine(Path.GetTempPath(), "SqlResultToolkit");
                 Directory.CreateDirectory(directory);
 
                 string path = Path.Combine(
@@ -659,7 +659,7 @@ namespace SqlCellInspector.UI
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("Opening the script in a query window failed.", ex);
+                SqlResultToolkitPackage.Log.Error("Opening the script in a query window failed.", ex);
                 _summary.Text = "Could not open a query window: " + ex.Message + ". Use Copy instead.";
             }
         }

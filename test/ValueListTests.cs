@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SqlCellInspector.Format;
+using SqlResultToolkit.Format;
 
-namespace SqlCellInspector.Tests
+namespace SqlResultToolkit.Tests
 {
     /// <summary>
     /// Turning selected editor text, and selected grid cells, into a SQL list. The text

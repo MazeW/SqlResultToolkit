@@ -5,7 +5,7 @@ using System.Data;
 using System.Reflection;
 using Microsoft.SqlServer.Management.UI.Grid;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     /// <summary>
     /// Late-bound access to the object behind <see cref="GridControl.GridStorage"/>.
@@ -84,7 +84,7 @@ namespace SqlCellInspector.Grid
             }
             catch (Exception ex)
             {
-                SqlCellInspectorPackage.Log.Error("GetCellData failed.", Unwrap(ex));
+                SqlResultToolkitPackage.Log.Error("GetCellData failed.", Unwrap(ex));
                 return null;
             }
         }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using SqlCellInspector.Grid;
+using SqlResultToolkit.Grid;
 
-namespace SqlCellInspector.Format
+namespace SqlResultToolkit.Format
 {
     internal enum ViewMode
     {

@@ -1,7 +1,9 @@
-# SQL Cell Inspector
+# SQL Result Toolkit
 
-A dockable side panel for SSMS 22 that shows the **complete** value of the selected
-result-grid cell, formatted and syntax-coloured for its SQL Server type.
+A dockable side panel for SSMS 22 for working with query results: read the **complete**
+value of a cell, formatted for its SQL Server type; generate INSERT / UPDATE / DELETE /
+SELECT / IN-list scripts from the rows you selected; and stage edits across many cells
+into a single UPDATE. Nothing is ever executed against the server.
 
 Built against SSMS **22.11.12324.101** (x64).
 
@@ -39,11 +41,11 @@ turns *all* of the staged edits into one UPDATE script: one statement per row, s
 the columns that were actually retyped.
 
 ```sql
-UPDATE [dbo].[CellInspectorDemo]
+UPDATE [dbo].[ResultToolkitDemo]
    SET [Name] = N'O''Brien, Ada',
        [Amount] = 42.5
  WHERE [Id] = 1;
-UPDATE [dbo].[CellInspectorDemo]
+UPDATE [dbo].[ResultToolkitDemo]
    SET [Name] = N'Grace M. Hopper'
  WHERE [Id] = 2;
 ```
@@ -191,7 +193,7 @@ The results grid is still the original Windows Forms `GridControl` from
 Everything that crosses into SSMS is wrapped: a failure is recorded, surfaced, and left to
 go no further. Problems appear in a bar at the bottom of the panel — count, the latest
 message with its real exception type, and **Details** / **Copy** / **Dismiss**. They also go
-to the activity log (`SqlCellInspector` source), but that is a fallback: SSMS does not write
+to the activity log (`SqlResultToolkit` source), but that is a fallback: SSMS does not write
 an activity log at all unless it was started with `/log`, so on its own it loses nearly
 every failure.
 
@@ -208,9 +210,9 @@ automatically when they are missing, so a fresh clone still builds in one comman
 .\build.ps1
 ```
 
-That compiles the command table, builds `SqlCellInspector.dll` against SSMS's own
+That compiles the command table, builds `SqlResultToolkit.dll` against SSMS's own
 assemblies, generates the pkgdef from the package attributes, and zips
-`dist\SqlCellInspector.vsix`.
+`dist\SqlResultToolkit.vsix`.
 
 Point it at a different SSMS with `-SsmsIde`.
 
@@ -220,7 +222,7 @@ The VSIX is unsigned, and that is fine for handing to colleagues. The VSIX Insta
 
 ```
 Install
-  SQL Cell Inspector
+  SQL Result Toolkit
   Digital Signature: None
 Select the product(s) you want to install the extension to:
   [x] SQL Server Management Studio 22
@@ -247,13 +249,13 @@ projects and is the realistic free route if it is ever needed.
 or run SSMS's own installer directly:
 
 ```powershell
-& "C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\VSIXInstaller.exe" .\dist\SqlCellInspector.vsix
+& "C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\VSIXInstaller.exe" .\dist\SqlResultToolkit.vsix
 ```
 
-Then restart SSMS and open it from **View → Other Windows → SQL Cell Inspector**, or press
+Then restart SSMS and open it from **View → Other Windows → SQL Result Toolkit**, or press
 **Ctrl+Alt+Q, Ctrl+Alt+V**. Dock it on the right next to the results grid.
 
-To remove it: **Tools → Extensions and Updates** (or `VSIXInstaller.exe /uninstall:SqlCellInspector.79da0b49-76bd-41ff-91b6-97d0fea27706`).
+To remove it: **Tools → Extensions and Updates** (or `VSIXInstaller.exe /uninstall:SqlResultToolkit.79da0b49-76bd-41ff-91b6-97d0fea27706`).
 
 ## Test
 
@@ -268,7 +270,7 @@ and depend on nothing from Visual Studio, so they run without SSMS.
 ### End-to-end
 
 ```powershell
-.\test\setup-demo-db.ps1        # dbo.CellInspectorDemo in LocalDB "test"; -Drop removes it
+.\test\setup-demo-db.ps1        # dbo.ResultToolkitDemo in LocalDB "test"; -Drop removes it
 . .\test\ui-helpers.ps1         # Start-SsmsWith, Send-Keys, Click-Screen, Save-Screen
 Start-SsmsWith -ScriptPath .\test\demo.sql
 ```
@@ -327,10 +329,10 @@ separate tabs rather than stacked, and the row cap on very large selections.
 ```
 build.ps1                       build + package (+ -Install)
 src/
-  SqlCellInspectorPackage.cs    AsyncPackage, commands, logging wrapper
+  SqlResultToolkitPackage.cs    AsyncPackage, commands, logging wrapper
   Diagnostics.cs                recorded problems, shown in the panel
-  CellInspectorWindow.cs        ToolWindowPane; owns the monitor while open
-  SqlCellInspector.vsct         menu command and key binding
+  ResultToolkitWindow.cs        ToolWindowPane; owns the monitor while open
+  SqlResultToolkit.vsct         menu command and key binding
   VSPackage.resx                embeds the compiled .cto as Menus.ctmenu
   source.extension.vsixmanifest targets Microsoft.VisualStudio.Ssms [22.0,)
   Grid/
@@ -354,7 +356,7 @@ src/
   UI/
     Theme.cs                    VS theme colours + syntax palettes
     EditorText.cs               reads and replaces the query window's text/selection
-    CellInspectorControl.cs     the panel shell + Value tab (WPF in code, no XAML)
+    ResultToolkitControl.cs     the panel shell + Value tab (WPF in code, no XAML)
     RowView.cs                  the Row tab
     ScriptView.cs               the Script tab
 test/
@@ -370,5 +372,5 @@ test/
   demo.sql                      two result sets over every interesting type
   ui-helpers.ps1                drive SSMS from outside and screenshot it
 tools/                          vendored VSCT, CreatePkgDef, net472 ref assemblies
-dist/SqlCellInspector.vsix      the build output
+dist/SqlResultToolkit.vsix      the build output
 ```

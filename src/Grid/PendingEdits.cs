@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.SqlServer.Management.UI.Grid;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     /// <summary>One cell the user has given a new value to, not yet written anywhere.</summary>
     internal sealed class PendingEdit

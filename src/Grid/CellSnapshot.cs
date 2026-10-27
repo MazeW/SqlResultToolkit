@@ -1,6 +1,6 @@
 using System;
 
-namespace SqlCellInspector.Grid
+namespace SqlResultToolkit.Grid
 {
     /// <summary>
     /// Everything the panel knows about one cell, captured on the UI thread at the moment
