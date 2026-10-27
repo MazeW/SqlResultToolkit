@@ -5,7 +5,12 @@ value of a cell, formatted for its SQL Server type; generate INSERT / UPDATE / D
 SELECT / IN-list scripts from the rows you selected; and stage edits across many cells
 into a single UPDATE. Nothing is ever executed against the server.
 
-Built against SSMS **22.11.12324.101** (x64).
+Built against SSMS **22.11.12324.101** (x64). SSMS 22 only, deliberately: every shell
+assembly it binds is version `18.0.0.0`, `Microsoft.VisualStudio.Interop` exists only from
+VS 2022 on, and SSMS 20 is a 32-bit VS 2019 shell — so widening the manifest's `[22.0,)`
+would only move the failure from the installer to package load. Supporting SSMS 20 would
+mean a second x86 manifest, the split interop assemblies back in place, and re-verifying
+the reflection into `QEResultSet` against that version's internals.
 
 ## What it does
 
