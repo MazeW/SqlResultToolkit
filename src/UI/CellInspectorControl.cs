@@ -57,6 +57,26 @@ namespace SqlCellInspector.UI
         private readonly Border _headerBorder = new Border();
         private readonly Border _toolbarBorder = new Border();
         private readonly Border _statusBorder = new Border();
+
+        // Problems surface here rather than only in the activity log, which SSMS does not
+        // write unless it was started with /log.
+        private readonly Border _problemsBorder = new Border { Visibility = Visibility.Collapsed, BorderThickness = new Thickness(0, 1, 0, 0) };
+        private readonly TextBlock _problemsText = new TextBlock { TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center };
+        private readonly Button _problemsCopy = new Button { Content = "Copy", Padding = new Thickness(8, 1, 8, 1), Margin = new Thickness(6, 0, 0, 0) };
+        private readonly Button _problemsDismiss = new Button { Content = "Dismiss", Padding = new Thickness(8, 1, 8, 1), Margin = new Thickness(4, 0, 0, 0) };
+        private readonly ToggleButton _problemsDetails = new ToggleButton { Content = "Details", Padding = new Thickness(8, 1, 8, 1), Margin = new Thickness(4, 0, 0, 0) };
+        private readonly TextBox _problemsList = new TextBox
+        {
+            IsReadOnly = true,
+            Visibility = Visibility.Collapsed,
+            BorderThickness = new Thickness(0),
+            MaxHeight = 160,
+            TextWrapping = TextWrapping.NoWrap,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            AcceptsReturn = true,
+            UndoLimit = 0
+        };
         private readonly GridSplitter _splitter = new GridSplitter { Height = 4, HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center, Background = Brushes.Transparent };
 
         private readonly TabControl _tabs = new TabControl();
@@ -91,12 +111,16 @@ namespace SqlCellInspector.UI
                 VSColorTheme.ThemeChanged += OnThemeChanged;
                 PendingEdits.Changed -= OnPendingEditsChanged;
                 PendingEdits.Changed += OnPendingEditsChanged;
+                Diagnostics.Changed -= OnDiagnosticsChanged;
+                Diagnostics.Changed += OnDiagnosticsChanged;
+                UpdateProblems();
             };
 
             Unloaded += (s, e) =>
             {
                 VSColorTheme.ThemeChanged -= OnThemeChanged;
                 PendingEdits.Changed -= OnPendingEditsChanged;
+                Diagnostics.Changed -= OnDiagnosticsChanged;
             };
         }
 
@@ -130,6 +154,31 @@ namespace SqlCellInspector.UI
             _tabs.SelectionChanged += OnTabChanged;
             _tabs.BorderThickness = new Thickness(0);
 
+            _problemsList.FontFamily = MonoFont;
+            _problemsList.FontSize = 11.5;
+
+            _problemsCopy.Click += (s2, e) => CopyProblems();
+            _problemsCopy.ToolTip = "Copy every recorded problem to the clipboard";
+            _problemsDismiss.Click += (s2, e) => Diagnostics.Clear();
+            _problemsDismiss.ToolTip = "Clear the recorded problems";
+            _problemsDetails.Checked += (s2, e) => UpdateProblems();
+            _problemsDetails.Unchecked += (s2, e) => UpdateProblems();
+
+            var problemButtons = new StackPanel { Orientation = Orientation.Horizontal };
+            problemButtons.Children.Add(_problemsDetails);
+            problemButtons.Children.Add(_problemsCopy);
+            problemButtons.Children.Add(_problemsDismiss);
+
+            var problemHeader = new DockPanel { LastChildFill = true };
+            DockPanel.SetDock(problemButtons, Dock.Right);
+            problemHeader.Children.Add(problemButtons);
+            problemHeader.Children.Add(_problemsText);
+
+            var problemPanel = new StackPanel { Margin = new Thickness(8, 3, 8, 3) };
+            problemPanel.Children.Add(problemHeader);
+            problemPanel.Children.Add(_problemsList);
+            _problemsBorder.Child = problemPanel;
+
             _statusBorder.Child = _statusText;
             _statusBorder.BorderThickness = new Thickness(0, 1, 0, 0);
 
@@ -137,12 +186,15 @@ namespace SqlCellInspector.UI
             root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             System.Windows.Controls.Grid.SetRow(_headerBorder, 0);
             root.Children.Add(_headerBorder);
             System.Windows.Controls.Grid.SetRow(_tabs, 1);
             root.Children.Add(_tabs);
-            System.Windows.Controls.Grid.SetRow(_statusBorder, 2);
+            System.Windows.Controls.Grid.SetRow(_problemsBorder, 2);
+            root.Children.Add(_problemsBorder);
+            System.Windows.Controls.Grid.SetRow(_statusBorder, 3);
             root.Children.Add(_statusBorder);
 
             Content = root;
@@ -244,6 +296,13 @@ namespace SqlCellInspector.UI
             _tabs.Background = _theme.Background;
             _tabs.Foreground = _theme.Foreground;
             _nullCheck.Foreground = _theme.Foreground;
+
+            _problemsBorder.Background = _theme.ChromeBackground;
+            _problemsBorder.BorderBrush = _theme.Border;
+            _problemsText.Foreground = _theme.Danger;
+            _problemsList.Background = _theme.Background;
+            _problemsList.Foreground = _theme.SubtleForeground;
+            _problemsList.SelectionBrush = _theme.SelectionBackground;
 
             _rowView?.ApplyTheme(_theme);
             _scriptView?.ApplyTheme(_theme);
@@ -740,6 +799,68 @@ namespace SqlCellInspector.UI
         /// refresh too: otherwise the Script tab keeps a stale count and the header keeps
         /// a stale "pending change" badge after the changes are gone.
         /// </summary>
+        private void OnDiagnosticsChanged(object sender, EventArgs e)
+        {
+            // Diagnostics can be recorded from a background thread.
+            if (Dispatcher.CheckAccess())
+            {
+                UpdateProblems();
+            }
+            else
+            {
+                Dispatcher.BeginInvoke(new Action(UpdateProblems));
+            }
+        }
+
+        /// <summary>
+        /// Shows what has gone wrong, in the panel, where it can actually be seen. The bar
+        /// stays hidden until something is recorded.
+        /// </summary>
+        private void UpdateProblems()
+        {
+            int count = Diagnostics.Count;
+            if (count == 0)
+            {
+                _problemsBorder.Visibility = Visibility.Collapsed;
+                _problemsList.Visibility = Visibility.Collapsed;
+                _problemsDetails.IsChecked = false;
+                return;
+            }
+
+            var latest = Diagnostics.Latest;
+            string summary = count == 1 ? "1 problem" : count + " problems";
+            string message = latest?.Message ?? string.Empty;
+            if (!string.IsNullOrEmpty(latest?.Detail))
+            {
+                message += "  (" + latest.Detail + ")";
+            }
+
+            _problemsText.Text = "⚠ " + summary + " — " + message;
+            _problemsBorder.Visibility = Visibility.Visible;
+
+            bool showing = _problemsDetails.IsChecked == true;
+            _problemsList.Visibility = showing ? Visibility.Visible : Visibility.Collapsed;
+            if (showing)
+            {
+                _problemsList.Text = string.Join(
+                    Environment.NewLine,
+                    Diagnostics.Recent().Select(entry => entry.ToString()));
+            }
+        }
+
+        private void CopyProblems()
+        {
+            try
+            {
+                Clipboard.SetText(Diagnostics.ToText());
+                _statusText.Text = "Copied the problem list.";
+            }
+            catch (Exception)
+            {
+                // Nothing useful to do: reporting a copy failure needs the clipboard.
+            }
+        }
+
         private void OnPendingEditsChanged(object sender, EventArgs e)
         {
             if (_cell != null)

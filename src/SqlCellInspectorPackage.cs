@@ -127,6 +127,9 @@ namespace SqlCellInspector
 
             public static void Error(string message, Exception ex = null)
             {
+                // Record first: the activity log is only written when SSMS was started
+                // with /log, so on its own it loses almost every failure.
+                Diagnostics.Record(message, ex);
                 Write(__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR, message, ex);
             }
 

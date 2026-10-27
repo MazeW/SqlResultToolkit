@@ -114,6 +114,7 @@
 
   <ItemGroup>
     <Compile Include="SqlCellInspectorPackage.cs" />
+    <Compile Include="Diagnostics.cs" />
     <Compile Include="CellInspectorWindow.cs" />
     <Compile Include="Grid\GridMonitor.cs" />
     <Compile Include="Grid\CellSnapshot.cs" />

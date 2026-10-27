@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="SqlCellInspector.79da0b49-76bd-41ff-91b6-97d0fea27706"
-              Version="1.5.1"
+              Version="1.6.0"
               Language="en-US"
               Publisher="Local build" />
     <DisplayName>SQL Cell Inspector</DisplayName>

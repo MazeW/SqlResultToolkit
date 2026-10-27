@@ -45,10 +45,12 @@ $sources = @(
     (Join-Path $src 'Format\SqlTableFinder.cs'),
     (Join-Path $src 'Format\ValueListBuilder.cs'),
     (Join-Path $src 'Grid\CellSnapshot.cs'),
+    (Join-Path $src 'Diagnostics.cs'),
     (Join-Path $PSScriptRoot 'FormatterTests.cs'),
     (Join-Path $PSScriptRoot 'ScriptTests.cs'),
     (Join-Path $PSScriptRoot 'TableFinderTests.cs'),
-    (Join-Path $PSScriptRoot 'ValueListTests.cs')
+    (Join-Path $PSScriptRoot 'ValueListTests.cs'),
+    (Join-Path $PSScriptRoot 'DiagnosticsTests.cs')
 )
 
 $exe = Join-Path $out 'FormatterTests.exe'

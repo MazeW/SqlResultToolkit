@@ -188,15 +188,20 @@ The results grid is still the original Windows Forms `GridControl` from
   from the measured luminance of the tool-window background, so custom and high-contrast
   themes stay readable. It re-renders on `VSColorTheme.ThemeChanged`.
 
-Everything that crosses into SSMS is wrapped: failures go to the activity log
-(`SqlCellInspector` source) and leave the IDE alone.
+Everything that crosses into SSMS is wrapped: a failure is recorded, surfaced, and left to
+go no further. Problems appear in a bar at the bottom of the panel — count, the latest
+message with its real exception type, and **Details** / **Copy** / **Dismiss**. They also go
+to the activity log (`SqlCellInspector` source), but that is a fallback: SSMS does not write
+an activity log at all unless it was started with `/log`, so on its own it loses nearly
+every failure.
 
 ## Build
 
 Needs MSBuild (Visual Studio Build Tools is enough — **no** VS SDK workload) and an
 installed SSMS 22. `VSCT.exe`, `CreatePkgDef.exe` and the .NET Framework 4.7.2 reference
 assemblies are **not** committed — they are ~176 MB of third-party binaries.
-`toolsestore-tools.ps1` fetches them from nuget.org, and `build.ps1` calls it
+`tools
+estore-tools.ps1` fetches them from nuget.org, and `build.ps1` calls it
 automatically when they are missing, so a fresh clone still builds in one command.
 
 ```powershell
@@ -232,8 +237,8 @@ To remove it: **Tools → Extensions and Updates** (or `VSIXInstaller.exe /unins
 .\test\run-tests.ps1
 ```
 
-304 assertions over the JSON and XML printers, the hex dump and content sniffing, the type
-catalog, the value describer and renderer, T-SQL literal formatting for every type, every branch of the script generator, the staged-edit path, the table-name guesser, and value-list building. They compile the same source files the extension uses
+323 assertions over the JSON and XML printers, the hex dump and content sniffing, the type
+catalog, the value describer and renderer, T-SQL literal formatting for every type, every branch of the script generator, the staged-edit path, the table-name guesser, value-list building, and the problem recorder. They compile the same source files the extension uses
 and depend on nothing from Visual Studio, so they run without SSMS.
 
 ### End-to-end
@@ -298,7 +303,8 @@ separate tabs rather than stacked, and the row cap on very large selections.
 ```
 build.ps1                       build + package (+ -Install)
 src/
-  SqlCellInspectorPackage.cs    AsyncPackage, command, activity-log wrapper
+  SqlCellInspectorPackage.cs    AsyncPackage, commands, logging wrapper
+  Diagnostics.cs                recorded problems, shown in the panel
   CellInspectorWindow.cs        ToolWindowPane; owns the monitor while open
   SqlCellInspector.vsct         menu command and key binding
   VSPackage.resx                embeds the compiled .cto as Menus.ctmenu
@@ -331,7 +337,8 @@ test/
   FormatterTests.cs             value/format assertions
   ScriptTests.cs                literal + script generator assertions
   TableFinderTests.cs           table-name guessing
-  ValueListTests.cs             value lists from text and from grid cells (304 in total)
+  ValueListTests.cs             value lists from text and from grid cells
+  DiagnosticsTests.cs           the problem recorder (323 in total)
   TintHarness.cs                pixel-samples cell tinting against a real GridControl
   run-tint-test.ps1             compile + run that harness
   run-tests.ps1                 compile + run

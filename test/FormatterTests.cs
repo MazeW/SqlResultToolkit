@@ -30,6 +30,7 @@ namespace SqlCellInspector.Tests
             ScriptGeneratorTests();
             TableFinderTests();
             ValueListTests();
+            DiagnosticsTests();
 
             Console.WriteLine();
             Console.WriteLine($"passed {_passed}, failed {_failed}");
