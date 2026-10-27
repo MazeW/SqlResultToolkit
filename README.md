@@ -214,6 +214,30 @@ assemblies, generates the pkgdef from the package attributes, and zips
 
 Point it at a different SSMS with `-SsmsIde`.
 
+## Sharing it
+
+The VSIX is unsigned, and that is fine for handing to colleagues. The VSIX Installer shows:
+
+```
+Install
+  SQL Cell Inspector
+  Digital Signature: None
+Select the product(s) you want to install the extension to:
+  [x] SQL Server Management Studio 22
+```
+
+No warning, no block — just a factual line, and the Install button works. (Verified on
+2026-10-27 by uninstalling and running the installer interactively.) The one case where
+this stops working is an organisation that enforces signed extensions, which is a policy
+setting rather than anything about the package.
+
+If signing ever becomes necessary, `Microsoft.VSSDK.Vsixsigntool` on nuget.org provides
+`VsixSignTool.exe`; the certificate is the hard part, not the tooling. A self-signed
+certificate does **not** help here: every recipient would have to add it to their trusted
+roots, which is a worse thing to ask of someone than installing an unsigned extension.
+[SignPath Foundation](https://signpath.org/) issues free certificates to open-source
+projects and is the realistic free route if it is ever needed.
+
 ## Install
 
 ```powershell
